@@ -1,0 +1,176 @@
+{% extends 'admin/base.html' %}
+
+{% block page_title %}Manajemen Data Penghuni{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <div>
+        <h5 class="fw-bold mb-1">Daftar Penghuni Kos</h5>
+        <p class="text-muted small mb-0">Kelola identitas, nomor kontak, dan berkas KTP penghuni NusantaraKos.</p>
+    </div>
+    <button class="btn btn-teal mt-3 mt-md-0" data-bs-toggle="modal" data-bs-target="#addTenantModal">
+        <i class="bi bi-person-plus-fill me-1"></i> Tambah Penghuni Baru
+    </button>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Lengkap</th>
+                        <th>No. WhatsApp/HP</th>
+                        <th>Email</th>
+                        <th>Pekerjaan / Instansi</th>
+                        <th>Foto KTP</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in tenants %}
+                    <tr>
+                        <td><strong>#P-{{ p.id }}</strong></td>
+                        <td class="fw-bold text-dark">{{ p.nama }}</td>
+                        <td>
+                            <a href="https://wa.me/{{ p.no_hp }}" target="_blank" class="text-teal text-decoration-none">
+                                <i class="bi bi-whatsapp me-1"></i> {{ p.no_hp }}
+                            </a>
+                        </td>
+                        <td class="small text-muted">{{ p.email or '-' }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ p.pekerjaan }}</span></td>
+                        <td>
+                            {% if p.foto_ktp %}
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#ktpModal{{ p.id }}">
+                                <i class="bi bi-card-image me-1"></i> Lihat KTP
+                            </button>
+
+                            <!-- KTP PREVIEW MODAL -->
+                            <div class="modal fade" id="ktpModal{{ p.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 rounded-4">
+                                        <div class="modal-header border-bottom-0">
+                                            <h6 class="fw-bold text-dark mb-0">KTP: {{ p.nama }}</h6>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body p-4 text-center">
+                                            <img src="{{ url_for('static', filename='uploads/' + p.foto_ktp) }}" alt="Foto KTP" class="img-fluid rounded-3 shadow-sm" style="max-height: 300px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary small">Belum Upload</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editTenantModal{{ p.id }}">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
+                                <a href="{{ url_for('admin_penghuni.hapus', id=p.id) }}" class="btn btn-sm btn-outline-danger btn-confirm-delete-tenant" data-nama="{{ p.nama }}">
+                                    <i class="bi bi-trash-fill"></i> Hapus
+                                </a>
+                            </div>
+
+                            <!-- EDIT TENANT MODAL -->
+                            <div class="modal fade" id="editTenantModal{{ p.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 rounded-4">
+                                        <form action="{{ url_for('admin_penghuni.edit', id=p.id) }}" method="POST" enctype="multipart/form-data">
+                                            <div class="modal-header border-bottom-0 pb-0">
+                                                <h5 class="fw-bold text-dark mb-0">Edit Penghuni: {{ p.nama }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Nama Lengkap</label>
+                                                    <input type="text" name="nama" class="form-control" value="{{ p.nama }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Nomor WhatsApp / HP</label>
+                                                    <input type="text" name="no_hp" class="form-control" value="{{ p.no_hp }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Email</label>
+                                                    <input type="email" name="email" class="form-control" value="{{ p.email }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Pekerjaan / Instansi Kampus</label>
+                                                    <input type="text" name="pekerjaan" class="form-control" value="{{ p.pekerjaan }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Alamat Asal</label>
+                                                    <textarea name="alamat" class="form-control" rows="2">{{ p.alamat }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Ganti Foto KTP (Opsional)</label>
+                                                    <input type="file" name="foto_ktp" class="form-control" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-top-0 pt-0">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-teal">Simpan Perubahan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Belum ada data penghuni.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ADD TENANT MODAL -->
+<div class="modal fade" id="addTenantModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <form action="{{ url_for('admin_penghuni.tambah') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="fw-bold text-dark mb-0">Tambah Penghuni Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Nama Lengkap</label>
+                        <input type="text" name="nama" class="form-control" placeholder="Contoh: Rian Hidayat" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Nomor WhatsApp / HP</label>
+                        <input type="text" name="no_hp" class="form-control" placeholder="08123456789" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control" placeholder="rian@mail.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Pekerjaan / Instansi</label>
+                        <input type="text" name="pekerjaan" class="form-control" placeholder="Mahasiswa UGM">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Alamat Asal</label>
+                        <textarea name="alamat" class="form-control" rows="2" placeholder="Jl. Malioboro No. 10..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Upload Foto KTP</label>
+                        <input type="file" name="foto_ktp" class="form-control" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-teal">Tambah Penghuni</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

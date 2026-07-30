@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NusantaraKos - Hunian Nyaman Mahasiswa Yogyakarta{% endblock %}</title>
+    <meta name="description" content="NusantaraKos — Kost Mahasiswa Nyaman, Aman, Dekat Kampus UGM, UNY, AMIKOM Yogyakarta dengan Fasilitas Lengkap.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom Public CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ─── NAVBAR ────────────────────────────────────────────────────────── -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Logo left -->
+            <a class="navbar-brand" href="{{ url_for('public.home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo NusantaraKos">
+                <span>NusantaraKos</span>
+            </a>
+            <!-- Toggler for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Centered menu -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.home' %}active{% endif %}" href="{{ url_for('public.home') }}">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.about' %}active{% endif %}" href="{{ url_for('public.about') }}">Tentang Kami</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.facilities' %}active{% endif %}" href="{{ url_for('public.facilities') }}">Fasilitas</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'public.contact' %}active{% endif %}" href="{{ url_for('public.contact') }}">Kontak</a></li>
+                </ul>
+            </div>
+            <!-- Right side buttons -->
+            <div class="d-none d-lg-flex align-items-center gap-2">
+                <a href="#" class="btn btn-outline-teal">Masuk</a>
+                <a href="#" class="btn btn-nav-primary">Daftar Sekarang</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ─── FOOTER ──────────────────────────────────────────────────────────── -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo NusantaraKos" style="width: 32px; height: 32px;">
+                        NusantaraKos
+                    </div>
+                    <p class="small text-white-50 mb-4">
+                        Kos Nusantara — Solusi hunian kost modern, nyaman, dan terpercaya bagi mahasiswa di Yogyakarta.
+                    </p>
+                    <div class="d-flex gap-3 text-white fs-5">
+                        <a href="#" class="text-white hover-teal"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white hover-teal"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white hover-teal"><i class="bi bi-tiktok"></i></a>
+                        <a href="#" class="text-white hover-teal"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Navigasi</h6>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('public.home') }}">Beranda</a></li>
+                        <li><a href="{{ url_for('public.about') }}">Tentang Kami</a></li>
+                        <li><a href="{{ url_for('public.contact') }}">Kontak</a></li>
+                        <li><a href="{{ url_for('public.room_catalog') }}">Informasi Kamar</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Tipe Kamar</h6>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('public.room_catalog') }}">Kamar Standard</a></li>
+                        <li><a href="{{ url_for('public.room_catalog') }}">Kamar Deluxe AC</a></li>
+                        <li><a href="{{ url_for('public.room_catalog') }}">Kamar VIP Suite</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="text-white fw-bold mb-3">Lokasi Terdekat</h6>
+                    <p class="small text-white-50 mb-1"><i class="bi bi-building-fill me-1 text-teal"></i> UGM (Universitas Gadjah Mada)</p>
+                    <p class="small text-white-50 mb-1"><i class="bi bi-building-fill me-1 text-teal"></i> UNY (Universitas Negeri Yogyakarta)</p>
+                    <p class="small text-white-50 mb-1"><i class="bi bi-building-fill me-1 text-teal"></i> AMIKOM Yogyakarta</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom text-center text-white-50">
+                <p class="mb-0">&copy; 2026 NusantaraKos. All rights reserved. Sistem Manajemen Kos Nusantara.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp CTA -->
+    <a href="https://wa.me/6282243104070?text=Halo%20NusantaraKos,%20saya%20tertarik%20dengan%20kamar%20kos." class="floating-wa" target="_blank" title="Chat WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Public JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

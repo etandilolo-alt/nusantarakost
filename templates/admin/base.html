@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard - NusantaraKos{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Custom Admin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="bg-light">
+
+    <div class="admin-wrapper">
+        <!-- ─── SIDEBAR ────────────────────────────────────────────────────────── -->
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="sidebar-logo">
+                <span class="sidebar-title">Admin Panel</span>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-label">UTAMA</div>
+                <a href="{{ url_for('admin.dashboard') }}" class="menu-item {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                    <i class="bi bi-grid-fill"></i> Dashboard
+                </a>
+
+                <div class="menu-label">MANAJEMEN KOS</div>
+                <a href="{{ url_for('admin_kamar.index') }}" class="menu-item {% if 'admin_kamar' in request.endpoint %}active{% endif %}">
+                    <i class="bi bi-door-closed-fill"></i> Kelola Kamar
+                </a>
+                <a href="{{ url_for('admin_penghuni.index') }}" class="menu-item {% if 'admin_penghuni' in request.endpoint %}active{% endif %}">
+                    <i class="bi bi-people-fill"></i> Kelola Penghuni
+                </a>
+                <a href="{{ url_for('admin_sewa.index') }}" class="menu-item {% if 'admin_sewa' in request.endpoint %}active{% endif %}">
+                    <i class="bi bi-receipt-cutoff"></i> Transaksi Sewa
+                </a>
+
+                <div class="menu-label">LAPORAN & WEBSITE</div>
+                <a href="{{ url_for('admin.laporan') }}" class="menu-item {% if request.endpoint == 'admin.laporan' %}active{% endif %}">
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i> Laporan Kos
+                </a>
+                <a href="{{ url_for('public.home') }}" class="menu-item" target="_blank">
+                    <i class="bi bi-box-arrow-up-right"></i> Lihat Web Publik
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-circle">A</div>
+                    <div>
+                        <small class="fw-bold d-block text-white">Administrator</small>
+                        <small class="text-muted">admin@nusantarakost.id</small>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ─── MAIN CONTENT WRAPPER ───────────────────────────────────────────── -->
+        <div class="admin-main">
+            <!-- Top Header Navbar -->
+            <header class="admin-header">
+                <button class="btn btn-light d-lg-none me-2" id="sidebarToggle">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <h5 class="fw-bold mb-0 text-dark">{% block page_title %}Dashboard Sistem{% endblock %}</h5>
+
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <span class="badge bg-teal-light text-teal px-3 py-2 rounded-pill"><i class="bi bi-circle-fill fs-6 text-success me-1"></i> System Online</span>
+                    <a href="{{ url_for('public.home') }}" class="btn btn-outline-secondary btn-sm rounded-pill" target="_blank">Web View</a>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="p-4">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Custom Admin JS -->
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

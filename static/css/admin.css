@@ -1,0 +1,193 @@
+/* ==========================================================================
+   NusantaraKos - Admin Dashboard Stylesheet
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+    --admin-primary: #0F766E;
+    --admin-dark: #0F172A;
+    --admin-sidebar-bg: #1E293B;
+    --admin-text-muted: #94A3B8;
+    --admin-bg-light: #F8FAFC;
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--admin-bg-light);
+    color: #1E293B;
+}
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 260px;
+    background-color: var(--admin-sidebar-bg);
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.sidebar-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #FFFFFF;
+}
+
+.sidebar-menu {
+    padding: 1.25rem 0.75rem;
+    flex-grow: 1;
+}
+
+.menu-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--admin-text-muted);
+    letter-spacing: 0.08em;
+    padding: 0.75rem 0.75rem 0.35rem;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #CBD5E1;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.6rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover, .menu-item.active {
+    background-color: var(--admin-primary);
+    color: #FFFFFF;
+}
+
+.sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    background-color: var(--admin-primary);
+    color: #FFFFFF;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main Area */
+.admin-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.admin-header {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Metrics Cards */
+.metric-card {
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #E2E8F0;
+    height: 100%;
+}
+
+.metric-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+}
+
+.metric-value {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #0F172A;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #64748B;
+    font-weight: 500;
+}
+
+.bg-primary-light { background-color: #EFF6FF; }
+.bg-success-light { background-color: #ECFDF5; }
+.bg-warning-light { background-color: #FFFBEB; }
+.bg-info-light { background-color: #F0F9FF; }
+.bg-purple-light { background-color: #F3E8FF; }
+.bg-teal-light { background-color: #F0FDFA; }
+
+.text-teal { color: #0F766E !important; }
+.text-purple { color: #8B5CF6 !important; }
+
+.btn-teal {
+    background-color: var(--admin-primary);
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 0.6rem;
+}
+
+.btn-teal:hover {
+    background-color: #0D655E;
+    color: #FFFFFF;
+}
+
+.btn-outline-teal {
+    border-color: var(--admin-primary);
+    color: var(--admin-primary);
+    font-weight: 600;
+    border-radius: 0.6rem;
+}
+
+.btn-outline-teal:hover {
+    background-color: var(--admin-primary);
+    color: #FFFFFF;
+}

@@ -1,0 +1,141 @@
+{% extends 'admin/base.html' %}
+
+{% block page_title %}Dashboard Ringkasan Kos{% endblock %}
+
+{% block content %}
+<!-- Metrics Cards Grid -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-primary bg-primary-light">
+                <i class="bi bi-door-closed-fill"></i>
+            </div>
+            <div class="metric-value">{{ total_rooms }}</div>
+            <div class="metric-label">Total Kamar</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-success bg-success-light">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="metric-value text-success">{{ available_rooms }}</div>
+            <div class="metric-label">Kamar Tersedia</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-warning bg-warning-light">
+                <i class="bi bi-person-workspace"></i>
+            </div>
+            <div class="metric-value text-warning">{{ occupied_rooms }}</div>
+            <div class="metric-label">Kamar Terisi</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-info bg-info-light">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="metric-value">{{ active_tenants }}</div>
+            <div class="metric-label">Penghuni Aktif</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-purple bg-purple-light">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+            <div class="metric-value text-purple">{{ active_rentals }}</div>
+            <div class="metric-label">Sewa Aktif</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="metric-card bg-white">
+            <div class="metric-icon text-teal bg-teal-light">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+            <div class="metric-value text-teal fs-6 fw-bold">Rp {{ "{:,}".format(total_income).replace(',', '.') }}</div>
+            <div class="metric-label">Est. Income Aktif</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <!-- Chart 1: Room Status Distribution -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between">
+                <h6 class="fw-bold text-dark mb-0">Status Ketersediaan Kamar</h6>
+            </div>
+            <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                <div style="width: 250px; height: 250px;">
+                    <canvas id="roomStatusChart" data-available="{{ available_rooms }}" data-occupied="{{ occupied_rooms }}"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2: Rental Income Trend -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between">
+                <h6 class="fw-bold text-dark mb-0">Estimasi Pendapatan Sewa (Bulanan)</h6>
+            </div>
+            <div class="card-body p-4">
+                <canvas id="incomeChart" style="height: 250px; width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Rentals Table -->
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-header bg-white border-0 pt-4 px-4 pb-3 d-flex align-items-center justify-content-between">
+        <h6 class="fw-bold text-dark mb-0">Transaksi Sewa Terbaru</h6>
+        <a href="{{ url_for('admin_sewa.index') }}" class="btn btn-sm btn-outline-teal">Lihat Semua Sewa</a>
+    </div>
+    <div class="table-responsive px-4 pb-4">
+        <table class="table align-middle table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>ID Sewa</th>
+                    <th>Nomor Kamar</th>
+                    <th>Nama Penghuni</th>
+                    <th>Tanggal Masuk</th>
+                    <th>Lama Sewa</th>
+                    <th>Total Bayar</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in recent_rentals %}
+                <tr>
+                    <td><strong>#SW-{{ s.id }}</strong></td>
+                    <td><span class="badge bg-teal-light text-teal px-2 py-1">Kamar {{ s.kamar_nomor }}</span></td>
+                    <td>{{ s.penghuni_nama }}</td>
+                    <td>{{ s.tanggal_masuk }}</td>
+                    <td>{{ s.lama_sewa }} Bulan</td>
+                    <td class="fw-bold text-dark">Rp {{ "{:,}".format(s.total_bayar).replace(',', '.') }}</td>
+                    <td>
+                        <span class="badge {{ 'bg-success' if s.status_sewa == 'Aktif' else 'bg-secondary' }}">
+                            {{ s.status_sewa }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-3">Belum ada transaksi sewa.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

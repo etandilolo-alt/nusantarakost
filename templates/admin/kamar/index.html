@@ -1,0 +1,165 @@
+{% extends 'admin/base.html' %}
+
+{% block page_title %}Manajemen Data Kamar{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <div>
+        <h5 class="fw-bold mb-1">Daftar Kamar Kos</h5>
+        <p class="text-muted small mb-0">Tambah, ubah, dan kelola ketersediaan kamar NusantaraKos.</p>
+    </div>
+    <button class="btn btn-teal mt-3 mt-md-0" data-bs-toggle="modal" data-bs-target="#addRoomModal">
+        <i class="bi bi-plus-lg me-1"></i> Tambah Kamar Baru
+    </button>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Foto</th>
+                        <th>Nomor Kamar</th>
+                        <th>Tipe Kamar</th>
+                        <th>Harga per Bulan</th>
+                        <th>Status</th>
+                        <th>Fasilitas</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in rooms %}
+                    <tr>
+                        <td>
+                            <img src="{{ url_for('static', filename='images/' + r.gambar) }}" alt="Foto Kamar" class="rounded-3" style="width: 60px; height: 45px; object-fit: cover;">
+                        </td>
+                        <td class="fw-bold text-dark">Kamar {{ r.nomor }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ r.tipe }}</span></td>
+                        <td class="fw-bold text-teal">Rp {{ "{:,}".format(r.harga).replace(',', '.') }}</td>
+                        <td>
+                            <span class="badge {{ 'bg-success' if r.status == 'Tersedia' else 'bg-secondary' }}">
+                                {{ r.status }}
+                            </span>
+                        </td>
+                        <td class="small text-muted" style="max-width: 200px;">
+                            {{ r.fasilitas|join(', ') }}
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editRoomModal{{ r.id }}">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
+                                <a href="{{ url_for('admin_kamar.hapus', id=r.id) }}" class="btn btn-sm btn-outline-danger btn-confirm-delete" data-nomor="{{ r.nomor }}" data-status="{{ r.status }}">
+                                    <i class="bi bi-trash-fill"></i> Hapus
+                                </a>
+                            </div>
+
+                            <!-- EDIT ROOM MODAL -->
+                            <div class="modal fade" id="editRoomModal{{ r.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 rounded-4">
+                                        <form action="{{ url_for('admin_kamar.edit', id=r.id) }}" method="POST" enctype="multipart/form-data">
+                                            <div class="modal-header border-bottom-0 pb-0">
+                                                <h5 class="fw-bold text-dark mb-0">Edit Kamar {{ r.nomor }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Nomor Kamar</label>
+                                                    <input type="text" name="nomor" class="form-control" value="{{ r.nomor }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Tipe Kamar</label>
+                                                    <select name="tipe" class="form-select" required>
+                                                        <option value="Standard" {% if r.tipe == 'Standard' %}selected{% endif %}>Standard</option>
+                                                        <option value="Deluxe AC" {% if r.tipe == 'Deluxe AC' %}selected{% endif %}>Deluxe AC</option>
+                                                        <option value="VIP Suite" {% if r.tipe == 'VIP Suite' %}selected{% endif %}>VIP Suite</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Harga Sewa per Bulan (Rp)</label>
+                                                    <input type="number" name="harga" class="form-control" value="{{ r.harga }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Fasilitas (Dipisah koma)</label>
+                                                    <input type="text" name="fasilitas" class="form-control" value="{{ r.fasilitas|join(', ') }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Deskripsi Kamar</label>
+                                                    <textarea name="deskripsi" class="form-control" rows="3">{{ r.deskripsi }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label small fw-semibold">Ganti Foto Kamar (Opsional)</label>
+                                                    <input type="file" name="gambar" class="form-control" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-top-0 pt-0">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-teal">Simpan Perubahan</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Belum ada data kamar.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ADD ROOM MODAL -->
+<div class="modal fade" id="addRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <form action="{{ url_for('admin_kamar.tambah') }}" method="POST" enctype="multipart/form-data">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="fw-bold text-dark mb-0">Tambah Kamar Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Nomor Kamar</label>
+                        <input type="text" name="nomor" class="form-control" placeholder="Contoh: 103" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Tipe Kamar</label>
+                        <select name="tipe" class="form-select" required>
+                            <option value="Standard">Standard</option>
+                            <option value="Deluxe AC">Deluxe AC</option>
+                            <option value="VIP Suite">VIP Suite</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Harga Sewa per Bulan (Rp)</label>
+                        <input type="number" name="harga" class="form-control" placeholder="1200000" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Fasilitas (Dipisah koma)</label>
+                        <input type="text" name="fasilitas" class="form-control" placeholder="Wi-Fi, AC, Kamar Mandi Dalam" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Deskripsi Kamar</label>
+                        <textarea name="deskripsi" class="form-control" rows="3" placeholder="Kamar tenang dengan pencahayaan maksimal..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Upload Foto Kamar</label>
+                        <input type="file" name="gambar" class="form-control" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-teal">Tambah Kamar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Tentang Kami - NusantaraKos Yogyakarta{% endblock %}
+
+{% block content %}
+<div class="py-5 bg-teal-light pt-120">
+    <div class="container text-center">
+        <span class="section-subtitle">Mengenal NusantaraKos</span>
+        <h1 class="fw-bold display-6 text-dark">Tentang Kami</h1>
+        <p class="text-muted max-w-600 mx-auto">Pengalaman 15 tahun menghadirkan hunian kost mahasiswa terbaik di Sleman, D.I. Yogyakarta.</p>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-6">
+                <div class="about-img-box">
+                    <img src="{{ url_for('static', filename='images/about-building.png') }}" alt="Gedung NusantaraKos">
+                    <div class="about-experience-badge">
+                        <div class="years">15+</div>
+                        <div class="label">Tahun Beroperasi</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <span class="section-subtitle">Visi & Misi</span>
+                <h2 class="section-title">Hunian Aman, Bersih, dan Kondusif</h2>
+                <p class="text-muted leading-relaxed">
+                    NusantaraKos berdiri sejak tahun 2011 di kawasan strategis Sleman, Yogyakarta. Fokus utama kami adalah menciptakan lingkungan tempat tinggal yang tenang, bersih, serta mendukung iklim akademik bagi mahasiswa yang sedang menempuh pendidikan tinggi.
+                </p>
+
+                <ul class="about-list mt-4">
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <div><strong>Aksesibilitas Tinggi:</strong> 5 menit ke UGM & UNY, 3 menit ke Jalan Kaliurang, dekat pusat belanja & minimarket.</div>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <div><strong>Lingkungan Ramah Mahasiswa:</strong> Aturan jam tenang malam diterapkan demi kenyamanan istirahat dan fokus belajar.</div>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i>
+                        <div><strong>Fasilitas Terawat:</strong> Pemeliharaan berkala untuk jaringan Wi-Fi, kebersihan area umum, dan sistem air bersih.</div>
+                    </li>
+                </ul>
+
+                <div class="mt-4 pt-2">
+                    <a href="{{ url_for('public.contact') }}" class="btn btn-nav-primary px-4 py-3">
+                        <i class="bi bi-chat-dots-fill me-2"></i> Hubungi Pengelola Kos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container text-center">
+        <span class="section-subtitle">Statistik Unggulan</span>
+        <h2 class="section-title mb-5">NusantaraKos dalam Angka</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded-4">
+                    <h2 class="fw-bold text-teal display-5 mb-1">200+</h2>
+                    <p class="text-muted small mb-0">Alumni Penghuni</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded-4">
+                    <h2 class="fw-bold text-teal display-5 mb-1">15+</h2>
+                    <p class="text-muted small mb-0">Tahun Pengalaman</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded-4">
+                    <h2 class="fw-bold text-teal display-5 mb-1">4.9 ★</h2>
+                    <p class="text-muted small mb-0">Rating Kepuasan</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-light rounded-4">
+                    <h2 class="fw-bold text-teal display-5 mb-1">100M</h2>
+                    <p class="text-muted small mb-0">Koneksi Wi-Fi Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

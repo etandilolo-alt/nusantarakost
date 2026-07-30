@@ -5,7 +5,7 @@
       "src": "index.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": ["templates/**", "static/**", "models/**", "database/**", "routes/**", "config.py"]
+        "includeFiles": ["**"]
       }
     }
   ],

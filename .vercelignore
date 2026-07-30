@@ -1,0 +1,13 @@
+# Jangan bundle file-file ini ke Vercel
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.env
+venv/
+env/
+*.log
+db_output.txt
+check_data.py
+sql_terminal.py
+README.md

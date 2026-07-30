@@ -1,0 +1,245 @@
+{% extends 'public/base.html' %}
+
+{% block title %}NusantaraKos - Rumah Kedua Mahasiswa Yogyakarta{% endblock %}
+
+{% block content %}
+<!-- ─── HERO SECTION (Auto Cross-fade Slideshow) ───────────────────────── -->
+<section class="hero-section">
+    <div class="hero-slideshow-overlay"></div>
+    <div class="container position-relative z-2">
+        <div class="row align-items-center gy-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <div class="hero-badge">
+                    <i class="bi bi-award-fill"></i> #1 Kost Mahasiswa Favorit Yogyakarta
+                </div>
+                <h1 class="hero-title">
+                    Rumah Kedua <br>
+                    <span>untuk Mahasiswa</span>
+                </h1>
+                <p class="hero-description">
+                    Lebih dari 100 mahasiswa mempercayakan huniannya pada NusantaraKos sejak kami berdiri di 2009. Lokasi dekat kampus, fasilitas lengkap, dan suasana tenang untuk mendukung sukses studi Anda.
+                </p>
+                
+                <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3">
+                    <a href="{{ url_for('public.room_catalog') }}" class="btn btn-hero-primary">
+                        <i class="bi bi-door-open-fill"></i> Lihat Kamar
+                    </a>
+                    <a href="{{ url_for('public.contact') }}" class="btn btn-hero-secondary">
+                        <i class="bi bi-telephone-fill"></i> Hubungi Kami
+                    </a>
+                </div>
+
+                <!-- Statistics Counters (Loaded dynamically) -->
+                <div class="hero-stats">
+                    <div class="row text-center text-lg-start g-3">
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="counter" data-target="{{ total_rooms }}">{{ total_rooms }}</h3>
+                                <p>Total Kamar</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="counter text-teal" data-target="{{ total_available }}">{{ total_available }}</h3>
+                                <p>Kamar Tersedia</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3 class="counter" data-target="{{ total_occupied }}">{{ total_occupied }}</h3>
+                                <p>Kamar Terisi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Slideshow Card Column -->
+            <div class="col-lg-5">
+                <div class="hero-preview-card">
+                    <div class="hero-img-slideshow" id="heroSlideshow">
+                        <img src="{{ url_for('static', filename='images/hero-bg.jpg') }}" class="slide-img active" alt="Depan Bangunan">
+                        <img src="{{ url_for('static', filename='images/about-building.jpg') }}" class="slide-img" alt="Ruang Tamu & Lounge">
+                        <img src="{{ url_for('static', filename='images/kamar-deluxe.jpg') }}" class="slide-img" alt="Kamar Kost">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mt-3 px-2">
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Gedung Utama NusantaraKos</h6>
+                            <p class="text-muted small mb-0"><i class="bi bi-geo-alt-fill text-teal"></i> Sleman, D.I. Yogyakarta</p>
+                        </div>
+                        <span class="badge bg-teal-light text-teal fw-bold px-3 py-2 rounded-pill">Aman 24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FEATURED ROOMS PREVIEW ─────────────────────────────────────────── -->
+<section class="py-5 my-4">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between mb-4">
+            <div>
+                <span class="section-subtitle">Pilihan Terfavorit</span>
+                <h2 class="section-title mb-0">Kamar Siap Huni Terbaru</h2>
+            </div>
+            <a href="{{ url_for('public.room_catalog') }}" class="btn btn-outline-teal mt-3 mt-md-0">
+                Lihat Semua Kamar <i class="bi bi-arrow-right me-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for r in rooms %}
+            <div class="col-md-6 col-lg-4">
+                <div class="room-card">
+                    <div class="room-img-container">
+                        <img src="{{ url_for('static', filename='images/' + r.gambar) }}" alt="Kamar {{ r.nomor }}">
+                        <span class="badge-status {{ 'tersedia' if r.status == 'Tersedia' else 'terisi' }}">
+                            {{ r.status }}
+                        </span>
+                        <span class="badge-type">Tipe {{ r.tipe }}</span>
+                    </div>
+                    <div class="room-body">
+                        <h5 class="room-number">Kamar {{ r.nomor }}</h5>
+                        <div class="room-facilities">
+                            {% for f in r.fasilitas %}
+                            <span class="facility-tag"><i class="bi bi-check2"></i> {{ f }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="room-price-wrap">
+                            <div class="room-price">
+                                Rp {{ "{:,}".format(r.harga).replace(',', '.') }} <span>/ bln</span>
+                            </div>
+                            <a href="https://wa.me/6282243104070?text=Halo%20NusantaraKos,%20saya%20tertarik%20dengan%20Kamar%20{{ r.nomor }}%20(Rp%20{{ "{:,}".format(r.harga).replace(',', '.') }}/bulan)." target="_blank" class="btn btn-detail">
+                                <i class="bi bi-whatsapp"></i> Tanya WA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ─── FASILITAS UTAMA ────────────────────────────────────────────────── -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-subtitle">Layanan Terpadu</span>
+            <h2 class="section-title">Fasilitas Unggulan NusantaraKos</h2>
+            <p class="section-desc">Dibuat khusus untuk memberikan pengalaman hunian terbaik selama perkuliahan.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="facility-card text-center">
+                    <div class="facility-icon-box mx-auto">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+                    <h4 class="facility-title">Wi-Fi 100 Mbps</h4>
+                    <p class="facility-desc">Internet serat optik cepat tanpa kuota untuk kuliah & hiburan.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="facility-card text-center">
+                    <div class="facility-icon-box mx-auto">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <h4 class="facility-title">CCTV & Keamanan 24/7</h4>
+                    <p class="facility-desc">Sistem pengamanan gerbang digital dan pengawasan non-stop.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="facility-card text-center">
+                    <div class="facility-icon-box mx-auto">
+                        <i class="bi bi-tsunami"></i>
+                    </div>
+                    <h4 class="facility-title">Area Laundry</h4>
+                    <p class="facility-desc">Fasilitas mesin cuci gratis dan area jemur terlindung.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="facility-card text-center">
+                    <div class="facility-icon-box mx-auto">
+                        <i class="bi bi-p-square-fill"></i>
+                    </div>
+                    <h4 class="facility-title">Parkir Luas</h4>
+                    <p class="facility-desc">Area parkir motor yang aman terlindung kanopi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── TESTIMONIALS CAROUSEL ──────────────────────────────────────────── -->
+<section class="py-5 bg-teal-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-subtitle">Pengalaman Penghuni</span>
+            <h2 class="section-title">Apa Kata Mahasiswa tentang Kami?</h2>
+        </div>
+
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active text-center px-4">
+                    <div class="max-w-700 mx-auto">
+                        <div class="fs-4 text-warning mb-3">★★★★★</div>
+                        <p class="fs-5 italic text-dark mb-4">"Kost ter-nyaman selama kuliah di UGM. Wi-Fi cepat banget, suasana tenang kalau mau belajar pas ujian, dan bapak kosnya ramah."</p>
+                        <h6 class="fw-bold mb-0">Rian Hidayat</h6>
+                        <small class="text-muted">Mahasiswa Teknik UGM (Penghuni 2 Tahun)</small>
+                    </div>
+                </div>
+
+                <div class="carousel-item text-center px-4">
+                    <div class="max-w-700 mx-auto">
+                        <div class="fs-4 text-warning mb-3">★★★★★</div>
+                        <p class="fs-5 italic text-dark mb-4">"Kamar Deluxe AC-nya bersih banget. Kamar mandi dalam ada air hangatnya, deket sama tempat makan dan ke UNY cuma 5 menit."</p>
+                        <h6 class="fw-bold mb-0">Anisa Rahmawati</h6>
+                        <small class="text-muted">Mahasiswa UNY (Penghuni 1.5 Tahun)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ─── GOOGLE MAPS LOCATION EMBED ─────────────────────────────────────── -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-5">
+                <span class="section-subtitle">Lokasi Strategis</span>
+                <h2 class="section-title">Mudah Ditemukan di Jantung Sleman</h2>
+                <p class="text-muted">Hanya berjarak beberapa menit dari kampus-kampus ternama di Yogyakarta. Lingkungan aman dan dekat dengan fasilitas publik.</p>
+                <div class="d-flex align-items-center gap-3 my-3">
+                    <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Jl. Lawu Raya No.40, Kledokan, Caturtunggal</h6>
+                        <small class="text-muted">Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281</small>
+                    </div>
+                </div>
+                <a href="https://maps.app.goo.gl/U3qxkD2NStfusV939" target="_blank" class="btn btn-nav-primary mt-2">
+                    <i class="bi bi-map-fill me-1"></i> Buka Google Maps
+                </a>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="rounded-4 overflow-hidden shadow-sm border border-light" style="height: 350px;">
+                    <iframe src="https://maps.google.com/maps?q=-7.7684427,110.4116789&hl=id&z=17&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

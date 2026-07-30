@@ -1,0 +1,139 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Informasi & Catalog Kamar - NusantaraKos{% endblock %}
+
+{% block content %}
+<div class="py-5 bg-teal-light pt-120">
+    <div class="container text-center">
+        <span class="section-subtitle">Katalog Pilihan Kamar</span>
+        <h1 class="fw-bold display-6 text-dark">Informasi Kamar Kos</h1>
+        <p class="text-muted max-w-600 mx-auto">Cari dan pilih tipe kamar yang sesuai dengan kebutuhan Anda. Reservasi dilakukan langsung via WhatsApp Pengelola Kos.</p>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <!-- Search & Filter Controls Bar -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-5 bg-white">
+            <div class="row g-3 align-items-center">
+                <!-- Search Input -->
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control bg-light border-start-0 ps-0" placeholder="Cari nomor kamar, tipe (e.g. Deluxe, AC)...">
+                    </div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="col-md-4">
+                    <select id="statusFilter" class="form-select bg-light">
+                        <option value="all">Semua Status Ketersediaan</option>
+                        <option value="Tersedia">Tersedia</option>
+                        <option value="Terisi">Terisi</option>
+                    </select>
+                </div>
+
+                <!-- Price Sort -->
+                <div class="col-md-3">
+                    <select id="priceSort" class="form-select bg-light">
+                        <option value="default">Urutkan Harga</option>
+                        <option value="low-high">Harga: Terendah ke Tertinggi</option>
+                        <option value="high-low">Harga: Tertinggi ke Terendah</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Cards Grid -->
+        <div class="row g-4" id="roomGrid">
+            {% for r in rooms %}
+            <div class="col-md-6 col-lg-4 room-card-wrapper" 
+                 data-nomor="{{ r.nomor }}" 
+                 data-tipe="{{ r.tipe }}" 
+                 data-harga="{{ r.harga }}" 
+                 data-status="{{ r.status }}">
+                <div class="room-card">
+                    <div class="room-img-container">
+                        <img src="{{ url_for('static', filename='images/' + r.gambar) }}" alt="Kamar {{ r.nomor }}">
+                        <span class="badge-status {{ 'tersedia' if r.status == 'Tersedia' else 'terisi' }}">
+                            {{ r.status }}
+                        </span>
+                        <span class="badge-type">Tipe {{ r.tipe }}</span>
+                    </div>
+                    <div class="room-body">
+                        <h5 class="room-number">Kamar {{ r.nomor }}</h5>
+                        <div class="room-facilities">
+                            {% for f in r.fasilitas %}
+                            <span class="facility-tag"><i class="bi bi-check2"></i> {{ f }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="room-price-wrap">
+                            <div class="room-price">
+                                Rp {{ "{:,}".format(r.harga).replace(',', '.') }} <span>/ bln</span>
+                            </div>
+                            <button class="btn btn-detail btn-open-modal"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#publicRoomModal"
+                                    data-nomor="{{ r.nomor }}"
+                                    data-tipe="{{ r.tipe }}"
+                                    data-harga="{{ "{:,}".format(r.harga).replace(',', '.') }}"
+                                    data-status="{{ r.status }}"
+                                    data-fasilitas="{{ r.fasilitas|join(', ') }}"
+                                    data-deskripsi="{{ r.deskripsi }}"
+                                    data-img="{{ url_for('static', filename='images/' + r.gambar) }}">
+                                Detail & WA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ─── PUBLIC ROOM DETAIL MODAL ───────────────────────────────────────── -->
+<div class="modal fade" id="publicRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header modal-header-custom align-items-center">
+                <div>
+                    <h5 class="modal-title fw-bold text-dark mb-0" id="modalTitle">Detail Kamar</h5>
+                    <small class="text-muted" id="modalTipe">Tipe Standard</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="rounded-4 overflow-hidden border border-light">
+                            <img id="modalImg" src="{{ url_for('static', filename='images/kamar-standard.png') }}" class="img-fluid w-100" alt="Foto Kamar" style="height: 250px; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span id="modalStatus" class="badge badge-status tersedia">Tersedia</span>
+                                <h4 id="modalHarga" class="fw-bold text-teal mb-0">Rp 1.200.000 / bln</h4>
+                            </div>
+                            <hr class="my-3">
+                            <h6 class="fw-bold text-dark mb-2">Fasilitas Kamar:</h6>
+                            <div id="modalFasilitas" class="d-flex flex-wrap gap-2 mb-3">
+                                <!-- Dynamic tags -->
+                            </div>
+                            <h6 class="fw-bold text-dark mb-1">Deskripsi & Catatan:</h6>
+                            <p id="modalDesc" class="text-muted small mb-0">Kamar bersih dan kondusif untuk mahasiswa.</p>
+                        </div>
+
+                        <div class="mt-4 pt-2">
+                            <a id="modalWaLink" href="#" target="_blank" class="btn btn-submit d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-whatsapp fs-5"></i> Tanya / Reservasi via WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

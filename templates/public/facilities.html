@@ -1,0 +1,39 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Fasilitas - NusantaraKos{% endblock %}
+
+{% block content %}
+<div class="container py-5 pt-120">
+    <h1 class="mb-4 text-center">Fasilitas Unggulan</h1>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="facility-card text-center">
+                <div class="facility-icon-box mx-auto"><i class="bi bi-wifi"></i></div>
+                <h4 class="facility-title">Wi‑Fi 100 Mbps</h4>
+                <p class="facility-desc">Internet serat optik cepat tanpa kuota.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="facility-card text-center">
+                <div class="facility-icon-box mx-auto"><i class="bi bi-shield-lock-fill"></i></div>
+                <h4 class="facility-title">Keamanan 24/7</h4>
+                <p class="facility-desc">CCTV, kontrol akses digital, penjaga.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="facility-card text-center">
+                <div class="facility-icon-box mx-auto"><i class="bi bi-umbrella"></i></div>
+                <h4 class="facility-title">Laundry Gratis</h4>
+                <p class="facility-desc">Mesin cuci dan area jemur tertutup.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="facility-card text-center">
+                <div class="facility-icon-box mx-auto"><i class="bi bi-parking"></i></div>
+                <h4 class="facility-title">Parkir Luas</h4>
+                <p class="facility-desc">Tempat motor & mobil aman dengan kanopi.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

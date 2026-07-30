@@ -1,0 +1,151 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Kontak Us - NusantaraKos Yogyakarta{% endblock %}
+
+{% block content %}
+<div class="py-5 bg-teal-light pt-120">
+    <div class="container text-center">
+        <span class="section-subtitle">Layanan Informasi</span>
+        <h1 class="fw-bold display-6 text-dark">Kontak Us</h1>
+        <p class="text-muted max-w-600 mx-auto">Kami siap membantu menjawab pertanyaan Anda terkait ketersediaan kamar, survei lokasi, dan reservasi.</p>
+    </div>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Contact Details -->
+            <div class="col-lg-5">
+                <div class="contact-card h-100">
+                    <h4 class="fw-bold mb-4 text-dark">Informasi Kontak Kos</h4>
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Alamat Lokasi</h6>
+                            <p class="text-muted small mb-0">Jl. Kaliurang KM 5.5, Pandega Marta No. 12, Sleman, D.I. Yogyakarta 55281</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-whatsapp"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">WhatsApp Pengelola</h6>
+                            <p class="text-muted small mb-0">+62 812-3456-7890 (Bpk. Bambang)</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Email Resmi</h6>
+                            <p class="text-muted small mb-0">info@nusantarakost.id</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Jam Layanan Survei</h6>
+                            <p class="text-muted small mb-0">Senin - Minggu: 08:00 - 20:00 WIB</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-4 mt-4 border border-teal">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-geo-fill text-teal fs-4"></i>
+                            <div>
+                                <small class="fw-bold d-block text-dark">Petunjuk Jalan:</small>
+                                <small class="text-muted">Dari Lampu Merah UPN Ringroad Utara, belok ke selatan sejauh 700 meter. Kemudian ambil gang di sebelah timur, sepanjang jalan Lawu Raya anda akan sampai di Kos Nusantara setelah 200 meter.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WhatsApp Form -->
+            <div class="col-lg-7">
+                <div class="contact-card">
+                    <h4 class="fw-bold mb-3 text-dark">Formulir Pesan WhatsApp</h4>
+                    <p class="text-muted small mb-4">Pesan Anda akan otomatis dikirimkan langsung ke WhatsApp Pemilik Kos.</p>
+
+                    <form id="contactForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Nama Lengkap</label>
+                                <input type="text" class="form-control form-control-custom" id="contactNama" placeholder="Contoh: Andi Pratama" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Nomor WhatsApp</label>
+                                <input type="tel" class="form-control form-control-custom" id="contactHp" placeholder="0812xxxxxxx" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small">Asal Kampus / Instansi</label>
+                                <input type="text" class="form-control form-control-custom" id="contactPekerjaan" placeholder="e.g. Mahasiswa UGM">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small">Pesan / Pertanyaan</label>
+                                <textarea class="form-control form-control-custom" id="contactPesan" rows="4" placeholder="Tanyakan jadwal survei, tipe kamar yang diminati, atau fasilitas..." required></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-submit d-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-whatsapp fs-5"></i> Kirim Pesan via WhatsApp
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="mt-5 pt-4">
+            <div class="text-center mb-4">
+                <span class="section-subtitle">Pertanyaan Umum</span>
+                <h3 class="fw-bold text-dark">FAQ (Frequently Asked Questions)</h3>
+            </div>
+
+            <div class="accordion max-w-800 mx-auto shadow-sm rounded-4 overflow-hidden" id="faqAccordion">
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Bagaimana cara memesan atau survei kamar?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Anda dapat menghubungi pengelola langsung via WhatsApp melalui tombol kontak di website ini untuk menentukan jadwal survei lokasi dan konfirmasi ketersediaan kamar.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Apakah harga sewa sudah termasuk listrik dan Wi-Fi?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Ya, harga sewa sudah termasuk fasilitas Wi-Fi 100 Mbps, pembersihan area umum, dan fasilitas bersama. Untuk penggunaan AC pada kamar Deluxe & VIP terdapat meteran listrik terpisah (token).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Apakah ada batas jam malam untuk penghuni?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body text-muted">
+                            Penghuni mendapatkan kunci gerbang/akses digital sendiri sehingga dapat beraktivitas fleksibel 24 jam dengan tetap mematuhi jam tenang setelah pukul 22.00 WIB.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

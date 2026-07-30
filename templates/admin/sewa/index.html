@@ -1,0 +1,132 @@
+{% extends 'admin/base.html' %}
+
+{% block page_title %}Manajemen Transaksi Sewa{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <div>
+        <h5 class="fw-bold mb-1">Transaksi Sewa Kos</h5>
+        <p class="text-muted small mb-0">Catat transaksi sewa baru, hitung total otomatis, dan kelola masa aktif hunian.</p>
+    </div>
+    <button class="btn btn-teal mt-3 mt-md-0" data-bs-toggle="modal" data-bs-target="#addRentalModal">
+        <i class="bi bi-receipt me-1"></i> Buat Transaksi Sewa Baru
+    </button>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Penghuni</th>
+                        <th>Kamar Kos</th>
+                        <th>Periode Sewa</th>
+                        <th>Lama Sewa</th>
+                        <th>Total Biaya</th>
+                        <th>Status Sewa</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in rentals %}
+                    <tr>
+                        <td><strong>#SW-{{ s.id }}</strong></td>
+                        <td class="fw-bold text-dark">{{ s.penghuni_nama }}</td>
+                        <td><span class="badge bg-teal-light text-teal border border-teal px-2 py-1">Kamar {{ s.kamar_nomor }}</span></td>
+                        <td class="small text-muted">{{ s.tanggal_masuk }} s.d {{ s.tanggal_keluar }}</td>
+                        <td><span class="badge bg-light text-dark border">{{ s.lama_sewa }} Bulan</span></td>
+                        <td class="fw-bold text-teal">Rp {{ "{:,}".format(s.total_bayar).replace(',', '.') }}</td>
+                        <td>
+                            <span class="badge {{ 'bg-success' if s.status_sewa == 'Aktif' else 'bg-secondary' }}">
+                                {{ s.status_sewa }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if s.status_sewa == 'Aktif' %}
+                            <a href="{{ url_for('admin_sewa.selesai', id=s.id) }}" class="btn btn-sm btn-outline-warning btn-confirm-end-rental" data-id="{{ s.id }}">
+                                <i class="bi bi-check-circle-fill me-1"></i> Selesaikan Sewa
+                            </a>
+                            {% else %}
+                            <span class="badge bg-light text-muted border">Selesai</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">Belum ada transaksi sewa.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ADD RENTAL MODAL -->
+<div class="modal fade" id="addRentalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4">
+            <form action="{{ url_for('admin_sewa.tambah') }}" method="POST" id="rentalForm">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="fw-bold text-dark mb-0">Transaksi Sewa Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Select Tenant -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Pilih Penghuni</label>
+                        <select name="id_penghuni" class="form-select" required>
+                            <option value="">-- Pilih Penghuni --</option>
+                            {% for p in tenants %}
+                            <option value="{{ p.id }}">{{ p.nama }} ({{ p.no_hp }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Select Available Room -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Pilih Kamar Tersedia</label>
+                        <select name="id_kamar" id="selectKamar" class="form-select" required>
+                            <option value="" data-harga="0">-- Pilih Kamar (Tersedia Only) --</option>
+                            {% for k in available_rooms %}
+                            <option value="{{ k.id }}" data-harga="{{ k.harga }}">Kamar {{ k.nomor }} - Tipe {{ k.tipe }} (Rp {{ "{:,}".format(k.harga).replace(',', '.') }}/bulan)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Tanggal Masuk</label>
+                            <input type="date" name="tanggal_masuk" id="tglMasuk" class="form-control" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Tanggal Keluar</label>
+                            <input type="date" name="tanggal_keluar" id="tglKeluar" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Auto Calculations -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Durasi Sewa (Bulan)</label>
+                        <input type="number" name="lama_sewa" id="lamaSewa" class="form-control bg-light" value="1" min="1" readonly required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Total Biaya Sewa (Rp)</label>
+                        <input type="number" name="total_bayar" id="totalBayar" class="form-control bg-light fw-bold text-teal fs-5" value="0" readonly required>
+                        <small class="text-muted fs-7">*Dihitung otomatis: (Durasi Bulan x Harga per Bulan Kamar)</small>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-teal">Simpan & Aktifkan Sewa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

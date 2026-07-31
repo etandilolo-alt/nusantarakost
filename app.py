@@ -2,6 +2,10 @@ import os
 from flask import Flask, render_template
 from config import Config
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+    
 def create_app():
     # Absolute paths required for Vercel serverless runtime
     base_dir = os.path.abspath(os.path.dirname(__file__))

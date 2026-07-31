@@ -4,7 +4,7 @@ from config import Config
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('templates/index.html')
     
 def create_app():
     # Absolute paths required for Vercel serverless runtime
